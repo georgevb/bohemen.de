@@ -5,11 +5,17 @@ import About from '../components/About.astro';
 import PortfolioGrid from '../components/PortfolioGrid.astro';
 import TestimonialSlider from '../components/TestimonialSlider.astro';
 import ContactSection from '../components/ContactSection.astro';
+
+// Load content from CMS
+const generalSettings = await import('../content/settings/general.json');
 ---
 
-<Layout title="Startseite">
+<Layout title={generalSettings.siteTitle}>
   <main>
-    <Hero />
+    <Hero 
+      title={generalSettings.heroTitle}
+      backgroundImage={generalSettings.heroImage}
+    />
     <About />
     <PortfolioGrid />
     <TestimonialSlider />
