@@ -67,11 +67,11 @@ const images = publishedPortfolio.map(item => ({
 </section>
 
 <!-- Lightbox -->
-<div id="lightbox" class="lightbox hidden">
-  <button id="lightbox-close" class="absolute top-4 right-4 text-white text-4xl z-10">&times;</button>
-  <button id="lightbox-prev" class="absolute left-4 top-1/2 -translate-y-1/2 text-white text-4xl">‹</button>
-  <button id="lightbox-next" class="absolute right-4 top-1/2 -translate-y-1/2 text-white text-4xl">›</button>
-  <img id="lightbox-image" src="" alt="" class="max-w-full max-h-full object-contain" />
+<div id="lightbox" class="hidden fixed inset-0 bg-black bg-opacity-95 z-50 flex items-center justify-center">
+  <button id="lightbox-close" class="absolute top-4 right-4 text-white text-4xl z-10 hover:text-gray-300 transition-colors">&times;</button>
+  <button id="lightbox-prev" class="absolute left-4 top-1/2 -translate-y-1/2 text-white text-4xl hover:text-gray-300 transition-colors">‹</button>
+  <button id="lightbox-next" class="absolute right-4 top-1/2 -translate-y-1/2 text-white text-4xl hover:text-gray-300 transition-colors">›</button>
+  <img id="lightbox-image" src="" alt="" class="max-w-[90%] max-h-[90%] object-contain" />
 </div>
 
 <style>
@@ -82,85 +82,102 @@ const images = publishedPortfolio.map(item => ({
   .category-filter.active {
     @apply text-gray-800 border-gray-800;
   }
-  
-  .lightbox {
-    @apply fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center;
-  }
 </style>
 
 <script define:vars={{ images }}>
-  // Category filtering
-  const filterButtons = document.querySelectorAll('.category-filter');
-  const portfolioItems = document.querySelectorAll('.portfolio-item');
-  
-  filterButtons.forEach(button => {
-    button.addEventListener('click', () => {
-      const category = button.dataset.category;
-      
-      filterButtons.forEach(btn => btn.classList.remove('active'));
-      button.classList.add('active');
-      
-      portfolioItems.forEach(item => {
-        if (category === 'all' || item.dataset.category === category) {
-          item.style.display = 'block';
-        } else {
-          item.style.display = 'none';
-        }
+  // Wait for DOM to be fully loaded
+  document.addEventListener('DOMContentLoaded', function() {
+    // Category filtering
+    const filterButtons = document.querySelectorAll('.category-filter');
+    const portfolioItems = document.querySelectorAll('.portfolio-item');
+    
+    filterButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const category = button.dataset.category;
+        
+        filterButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        
+        portfolioItems.forEach(item => {
+          if (category === 'all' || item.dataset.category === category) {
+            item.style.display = 'block';
+          } else {
+            item.style.display = 'none';
+          }
+        });
       });
     });
-  });
 
-  // Lightbox functionality
-  const lightbox = document.getElementById('lightbox');
-  const lightboxImage = document.getElementById('lightbox-image');
-  const lightboxClose = document.getElementById('lightbox-close');
-  const lightboxPrev = document.getElementById('lightbox-prev');
-  const lightboxNext = document.getElementById('lightbox-next');
-  let currentIndex = 0;
+    // Lightbox functionality
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxClose = document.getElementById('lightbox-close');
+    const lightboxPrev = document.getElementById('lightbox-prev');
+    const lightboxNext = document.getElementById('lightbox-next');
+    let currentIndex = 0;
 
-  portfolioItems.forEach((item, index) => {
-    item.addEventListener('click', () => {
-      currentIndex = parseInt(item.dataset.index);
-      showLightbox();
-    });
-  });
+    // Ensure lightbox is hidden on load
+    if (lightbox) {
+      lightbox.classList.add('hidden');
+    }
 
-  function showLightbox() {
-    const image = images[currentIndex];
-    lightboxImage.src = image.src;
-    lightboxImage.alt = image.alt;
-    lightbox.classList.remove('hidden');
-    document.body.style.overflow = 'hidden';
-  }
+    // Only add event listeners if elements exist
+    if (lightbox && lightboxImage && lightboxClose) {
+      portfolioItems.forEach((item, index) => {
+        item.addEventListener('click', (e) => {
+          e.preventDefault();
+          currentIndex = parseInt(item.dataset.index) || index;
+          showLightbox();
+        });
+      });
 
-  function hideLightbox() {
-    lightbox.classList.add('hidden');
-    document.body.style.overflow = 'auto';
-  }
+      function showLightbox() {
+        if (images && images[currentIndex]) {
+          const image = images[currentIndex];
+          lightboxImage.src = image.src;
+          lightboxImage.alt = image.alt;
+          lightbox.classList.remove('hidden');
+          document.body.style.overflow = 'hidden';
+        }
+      }
 
-  function nextImage() {
-    currentIndex = (currentIndex + 1) % images.length;
-    showLightbox();
-  }
+      function hideLightbox() {
+        lightbox.classList.add('hidden');
+        document.body.style.overflow = 'auto';
+      }
 
-  function prevImage() {
-    currentIndex = (currentIndex - 1 + images.length) % images.length;
-    showLightbox();
-  }
+      function nextImage() {
+        if (images && images.length > 0) {
+          currentIndex = (currentIndex + 1) % images.length;
+          showLightbox();
+        }
+      }
 
-  lightboxClose.addEventListener('click', hideLightbox);
-  lightbox.addEventListener('click', (e) => {
-    if (e.target === lightbox) hideLightbox();
-  });
-  lightboxNext.addEventListener('click', nextImage);
-  lightboxPrev.addEventListener('click', prevImage);
+      function prevImage() {
+        if (images && images.length > 0) {
+          currentIndex = (currentIndex - 1 + images.length) % images.length;
+          showLightbox();
+        }
+      }
 
-  // Keyboard navigation
-  document.addEventListener('keydown', (e) => {
-    if (!lightbox.classList.contains('hidden')) {
-      if (e.key === 'Escape') hideLightbox();
-      if (e.key === 'ArrowRight') nextImage();
-      if (e.key === 'ArrowLeft') prevImage();
+      // Event listeners
+      lightboxClose.addEventListener('click', hideLightbox);
+      
+      lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) hideLightbox();
+      });
+      
+      if (lightboxNext) lightboxNext.addEventListener('click', nextImage);
+      if (lightboxPrev) lightboxPrev.addEventListener('click', prevImage);
+
+      // Keyboard navigation
+      document.addEventListener('keydown', (e) => {
+        if (!lightbox.classList.contains('hidden')) {
+          if (e.key === 'Escape') hideLightbox();
+          if (e.key === 'ArrowRight') nextImage();
+          if (e.key === 'ArrowLeft') prevImage();
+        }
+      });
     }
   });
 </script>
