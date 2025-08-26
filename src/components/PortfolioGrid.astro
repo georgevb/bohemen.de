@@ -1,66 +1,64 @@
 ---
-export interface PortfolioImage {
-  src: string;
-  alt: string;
-  category: 'wedding' | 'portrait' | 'event' | 'nature';
-  size?: 'small' | 'medium' | 'large';
-}
+import { getCollection } from 'astro:content';
 
-const images: PortfolioImage[] = [
-  { src: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=800&q=80", alt: "Hochzeit in der Kirche", category: "wedding", size: "large" },
-  { src: "https://images.unsplash.com/photo-1519741497674-611481863552?w=600&q=80", alt: "Brautpaar Portrait", category: "wedding", size: "medium" },
-  { src: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=600&q=80", alt: "Familie im Park", category: "portrait", size: "small" },
-  { src: "https://images.unsplash.com/photo-1460978812857-470ed1c77af0?w=800&q=80", alt: "Hochzeitsfeier", category: "wedding", size: "large" },
-  { src: "https://images.unsplash.com/photo-1537633552985-df8429e8048b?w=600&q=80", alt: "Business Portrait", category: "portrait", size: "medium" },
-  { src: "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=600&q=80", alt: "Outdoor Hochzeit", category: "wedding", size: "small" },
-  { src: "https://images.unsplash.com/photo-1514222788835-3a1a1d5b32f8?w=800&q=80", alt: "Event Fotografie", category: "event", size: "large" },
-  { src: "https://images.unsplash.com/photo-1502635385003-ee1e6a1a742d?w=600&q=80", alt: "Natur Landschaft", category: "nature", size: "medium" },
-  { src: "https://images.unsplash.com/photo-1525258946800-98cfd641d0de?w=600&q=80", alt: "Hochzeitsdetails", category: "wedding", size: "small" },
-  { src: "https://images.unsplash.com/photo-1549416878-43849022d369?w=800&q=80", alt: "Gruppen Portrait", category: "portrait", size: "large" },
-  { src: "https://images.unsplash.com/photo-1550005809-91ad75fb315f?w=600&q=80", alt: "Kinder Portrait", category: "portrait", size: "medium" },
-  { src: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80", alt: "Business Event", category: "event", size: "small" },
-];
+const portfolio = await getCollection('portfolio');
+const publishedPortfolio = portfolio.filter(item => item.data.published).sort((a, b) => a.data.order - b.data.order);
+
+const images = publishedPortfolio.map(item => ({
+  src: item.data.image,
+  alt: item.data.alt,
+  title: item.data.title,
+  category: item.data.category,
+  size: item.data.size || 'medium'
+}));
 ---
 
-<section id="portfolio" class="py-16 md:py-24 bg-cream">
+<section id="portfolio" class="py-20 md:py-32 bg-white">
   <div class="container-custom">
-    <h2 class="text-4xl md:text-5xl font-light text-center mb-12">Portfolio</h2>
+    <h2 class="font-script text-5xl md:text-6xl text-center mb-16 text-gray-800">Portfolio</h2>
     
     <!-- Category Filter -->
-    <div class="flex justify-center space-x-4 mb-12">
-      <button class="category-filter active px-4 py-2 text-sm font-medium transition-colors" data-category="all">
-        Alle
+    <div class="flex justify-center flex-wrap gap-4 mb-16">
+      <button class="category-filter active px-6 py-3 text-sm font-medium transition-colors uppercase tracking-wider" data-category="all">
+        All
       </button>
-      <button class="category-filter px-4 py-2 text-sm font-medium transition-colors" data-category="wedding">
-        Hochzeiten
+      <button class="category-filter px-6 py-3 text-sm font-medium transition-colors uppercase tracking-wider" data-category="wedding">
+        Weddings
       </button>
-      <button class="category-filter px-4 py-2 text-sm font-medium transition-colors" data-category="portrait">
+      <button class="category-filter px-6 py-3 text-sm font-medium transition-colors uppercase tracking-wider" data-category="portrait">
         Portraits
       </button>
-      <button class="category-filter px-4 py-2 text-sm font-medium transition-colors" data-category="event">
+      <button class="category-filter px-6 py-3 text-sm font-medium transition-colors uppercase tracking-wider" data-category="event">
         Events
       </button>
-      <button class="category-filter px-4 py-2 text-sm font-medium transition-colors" data-category="nature">
-        Natur
+      <button class="category-filter px-6 py-3 text-sm font-medium transition-colors uppercase tracking-wider" data-category="nature">
+        Nature
       </button>
     </div>
 
     <!-- Masonry Grid -->
-    <div class="masonry-grid" id="portfolio-grid">
+    <div class="columns-1 md:columns-2 lg:columns-3 xl:columns-4 gap-4 space-y-4" id="portfolio-grid">
       {images.map((image, index) => (
         <div 
-          class="masonry-item portfolio-item cursor-pointer group" 
+          class={`portfolio-item cursor-pointer group break-inside-avoid mb-4 ${
+            image.size === 'large' ? 'md:col-span-2' : 
+            image.size === 'small' ? '' : ''
+          }`}
           data-category={image.category}
           data-index={index}
         >
-          <div class="relative overflow-hidden rounded-lg">
+          <div class="relative overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
             <img
               src={image.src}
               alt={image.alt}
-              class="w-full h-auto transition-transform duration-500 group-hover:scale-110"
+              class="w-full h-auto transition-transform duration-500 group-hover:scale-105"
               loading="lazy"
             />
-            <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all duration-300"></div>
+            <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
+              <span class="text-white text-lg font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                {image.title}
+              </span>
+            </div>
           </div>
         </div>
       ))}
@@ -78,11 +76,15 @@ const images: PortfolioImage[] = [
 
 <style>
   .category-filter {
-    @apply text-gray-600 hover:text-charcoal;
+    @apply text-gray-600 hover:text-gray-800 border-b-2 border-transparent;
   }
   
   .category-filter.active {
-    @apply text-charcoal border-b-2 border-charcoal;
+    @apply text-gray-800 border-gray-800;
+  }
+  
+  .lightbox {
+    @apply fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center;
   }
 </style>
 

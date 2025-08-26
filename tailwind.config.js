@@ -4,7 +4,8 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        'script': ['Pinyon Script', 'cursive'],
+        'script': ['Great Vibes', 'Dancing Script', 'cursive'],
+        'elegant': ['Dancing Script', 'cursive'],
         'sans': ['Inter', 'system-ui', 'sans-serif'],
       },
       colors: {
