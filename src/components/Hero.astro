@@ -1,0 +1,38 @@
+---
+export interface Props {
+  backgroundImage?: string;
+  title?: string;
+}
+
+const { 
+  backgroundImage = "https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=1920&q=80",
+  title = "Peter van Bohemen"
+} = Astro.props;
+---
+
+<section class="relative h-screen w-full overflow-hidden">
+  <!-- Background Image with Overlay -->
+  <div class="absolute inset-0">
+    <img
+      src={backgroundImage}
+      alt="Wedding photography by Peter van Bohemen"
+      class="h-full w-full object-cover"
+      loading="eager"
+    />
+    <div class="absolute inset-0 bg-black bg-opacity-20"></div>
+  </div>
+
+  <!-- Title Overlay -->
+  <div class="absolute top-12 right-8 md:top-20 md:right-16 lg:top-24 lg:right-24 z-10">
+    <h1 class="font-script text-5xl md:text-6xl lg:text-7xl xl:text-8xl text-white drop-shadow-lg animate-fade-in">
+      {title}
+    </h1>
+  </div>
+
+  <!-- Scroll Indicator -->
+  <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white animate-bounce">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-8 h-8">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+    </svg>
+  </div>
+</section>

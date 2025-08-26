@@ -1,0 +1,145 @@
+---
+export interface Testimonial {
+  content: string;
+  author: string;
+  event?: string;
+}
+
+const testimonials: Testimonial[] = [
+  {
+    content: "Peter hat unsere Hochzeit auf wunderbare Weise festgehalten. Die Fotos sind einfach atemberaubend und fangen die Emotionen des Tages perfekt ein. Wir sind überglücklich mit dem Ergebnis!",
+    author: "Sarah & Michael",
+    event: "Hochzeit 2024"
+  },
+  {
+    content: "Professionell, kreativ und immer mit einem Lächeln - Peter ist der beste Fotograf, den wir uns hätten wünschen können. Die Familienportraits sind wunderschön geworden.",
+    author: "Familie Weber",
+    event: "Familienshooting"
+  },
+  {
+    content: "Die Zusammenarbeit mit Peter war von Anfang bis Ende perfekt. Er hat ein Auge für Details und schafft es, besondere Momente einzufangen, die man selbst gar nicht wahrnimmt.",
+    author: "Anna & Thomas",
+    event: "Hochzeit 2023"
+  },
+  {
+    content: "Peter hat unsere Firmenveranstaltung dokumentiert und die Bilder übertreffen alle Erwartungen. Sehr empfehlenswert für professionelle Event-Fotografie!",
+    author: "Klaus Müller",
+    event: "Firmenevent"
+  }
+];
+---
+
+<section id="testimonials" class="py-16 md:py-24 bg-charcoal text-white">
+  <div class="container-custom">
+    <h2 class="text-4xl md:text-5xl font-light text-center mb-12">Was meine Kunden sagen</h2>
+    
+    <div class="relative max-w-4xl mx-auto">
+      <!-- Testimonial Slider Container -->
+      <div class="overflow-hidden">
+        <div class="flex transition-transform duration-500 ease-in-out" id="testimonial-slider">
+          {testimonials.map((testimonial, index) => (
+            <div class="testimonial-slide min-w-full" data-index={index}>
+              <blockquote class="text-lg md:text-xl italic mb-6">
+                "{testimonial.content}"
+              </blockquote>
+              <div class="text-center">
+                <p class="font-medium text-lg">{testimonial.author}</p>
+                {testimonial.event && (
+                  <p class="text-gray-400 text-sm mt-1">{testimonial.event}</p>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      
+      <!-- Navigation Buttons -->
+      <button 
+        id="prev-testimonial" 
+        class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 md:-translate-x-16 text-4xl text-white hover:text-gray-300 transition-colors"
+        aria-label="Previous testimonial"
+      >
+        ‹
+      </button>
+      <button 
+        id="next-testimonial" 
+        class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 md:translate-x-16 text-4xl text-white hover:text-gray-300 transition-colors"
+        aria-label="Next testimonial"
+      >
+        ›
+      </button>
+      
+      <!-- Dots Indicator -->
+      <div class="flex justify-center space-x-2 mt-8">
+        {testimonials.map((_, index) => (
+          <button 
+            class="testimonial-dot w-2 h-2 rounded-full bg-gray-600 transition-colors"
+            data-index={index}
+            aria-label={`Go to testimonial ${index + 1}`}
+          ></button>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script define:vars={{ testimonials }}>
+  const slider = document.getElementById('testimonial-slider');
+  const prevButton = document.getElementById('prev-testimonial');
+  const nextButton = document.getElementById('next-testimonial');
+  const dots = document.querySelectorAll('.testimonial-dot');
+  
+  let currentTestimonial = 0;
+  const totalTestimonials = testimonials.length;
+  
+  function updateSlider() {
+    slider.style.transform = `translateX(-${currentTestimonial * 100}%)`;
+    
+    // Update dots
+    dots.forEach((dot, index) => {
+      if (index === currentTestimonial) {
+        dot.classList.remove('bg-gray-600');
+        dot.classList.add('bg-white');
+      } else {
+        dot.classList.remove('bg-white');
+        dot.classList.add('bg-gray-600');
+      }
+    });
+  }
+  
+  function nextTestimonial() {
+    currentTestimonial = (currentTestimonial + 1) % totalTestimonials;
+    updateSlider();
+  }
+  
+  function prevTestimonial() {
+    currentTestimonial = (currentTestimonial - 1 + totalTestimonials) % totalTestimonials;
+    updateSlider();
+  }
+  
+  function goToTestimonial(index) {
+    currentTestimonial = index;
+    updateSlider();
+  }
+  
+  // Event listeners
+  nextButton.addEventListener('click', nextTestimonial);
+  prevButton.addEventListener('click', prevTestimonial);
+  
+  dots.forEach((dot, index) => {
+    dot.addEventListener('click', () => goToTestimonial(index));
+  });
+  
+  // Auto-play
+  let autoPlayInterval = setInterval(nextTestimonial, 5000);
+  
+  // Pause auto-play on hover
+  const sliderContainer = slider.parentElement.parentElement;
+  sliderContainer.addEventListener('mouseenter', () => clearInterval(autoPlayInterval));
+  sliderContainer.addEventListener('mouseleave', () => {
+    autoPlayInterval = setInterval(nextTestimonial, 5000);
+  });
+  
+  // Initialize
+  updateSlider();
+</script>

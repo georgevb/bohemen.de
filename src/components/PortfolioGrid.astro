@@ -1,0 +1,164 @@
+---
+export interface PortfolioImage {
+  src: string;
+  alt: string;
+  category: 'wedding' | 'portrait' | 'event' | 'nature';
+  size?: 'small' | 'medium' | 'large';
+}
+
+const images: PortfolioImage[] = [
+  { src: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=800&q=80", alt: "Hochzeit in der Kirche", category: "wedding", size: "large" },
+  { src: "https://images.unsplash.com/photo-1519741497674-611481863552?w=600&q=80", alt: "Brautpaar Portrait", category: "wedding", size: "medium" },
+  { src: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=600&q=80", alt: "Familie im Park", category: "portrait", size: "small" },
+  { src: "https://images.unsplash.com/photo-1460978812857-470ed1c77af0?w=800&q=80", alt: "Hochzeitsfeier", category: "wedding", size: "large" },
+  { src: "https://images.unsplash.com/photo-1537633552985-df8429e8048b?w=600&q=80", alt: "Business Portrait", category: "portrait", size: "medium" },
+  { src: "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=600&q=80", alt: "Outdoor Hochzeit", category: "wedding", size: "small" },
+  { src: "https://images.unsplash.com/photo-1514222788835-3a1a1d5b32f8?w=800&q=80", alt: "Event Fotografie", category: "event", size: "large" },
+  { src: "https://images.unsplash.com/photo-1502635385003-ee1e6a1a742d?w=600&q=80", alt: "Natur Landschaft", category: "nature", size: "medium" },
+  { src: "https://images.unsplash.com/photo-1525258946800-98cfd641d0de?w=600&q=80", alt: "Hochzeitsdetails", category: "wedding", size: "small" },
+  { src: "https://images.unsplash.com/photo-1549416878-43849022d369?w=800&q=80", alt: "Gruppen Portrait", category: "portrait", size: "large" },
+  { src: "https://images.unsplash.com/photo-1550005809-91ad75fb315f?w=600&q=80", alt: "Kinder Portrait", category: "portrait", size: "medium" },
+  { src: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80", alt: "Business Event", category: "event", size: "small" },
+];
+---
+
+<section id="portfolio" class="py-16 md:py-24 bg-cream">
+  <div class="container-custom">
+    <h2 class="text-4xl md:text-5xl font-light text-center mb-12">Portfolio</h2>
+    
+    <!-- Category Filter -->
+    <div class="flex justify-center space-x-4 mb-12">
+      <button class="category-filter active px-4 py-2 text-sm font-medium transition-colors" data-category="all">
+        Alle
+      </button>
+      <button class="category-filter px-4 py-2 text-sm font-medium transition-colors" data-category="wedding">
+        Hochzeiten
+      </button>
+      <button class="category-filter px-4 py-2 text-sm font-medium transition-colors" data-category="portrait">
+        Portraits
+      </button>
+      <button class="category-filter px-4 py-2 text-sm font-medium transition-colors" data-category="event">
+        Events
+      </button>
+      <button class="category-filter px-4 py-2 text-sm font-medium transition-colors" data-category="nature">
+        Natur
+      </button>
+    </div>
+
+    <!-- Masonry Grid -->
+    <div class="masonry-grid" id="portfolio-grid">
+      {images.map((image, index) => (
+        <div 
+          class="masonry-item portfolio-item cursor-pointer group" 
+          data-category={image.category}
+          data-index={index}
+        >
+          <div class="relative overflow-hidden rounded-lg">
+            <img
+              src={image.src}
+              alt={image.alt}
+              class="w-full h-auto transition-transform duration-500 group-hover:scale-110"
+              loading="lazy"
+            />
+            <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all duration-300"></div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- Lightbox -->
+<div id="lightbox" class="lightbox hidden">
+  <button id="lightbox-close" class="absolute top-4 right-4 text-white text-4xl z-10">&times;</button>
+  <button id="lightbox-prev" class="absolute left-4 top-1/2 -translate-y-1/2 text-white text-4xl">‹</button>
+  <button id="lightbox-next" class="absolute right-4 top-1/2 -translate-y-1/2 text-white text-4xl">›</button>
+  <img id="lightbox-image" src="" alt="" class="max-w-full max-h-full object-contain" />
+</div>
+
+<style>
+  .category-filter {
+    @apply text-gray-600 hover:text-charcoal;
+  }
+  
+  .category-filter.active {
+    @apply text-charcoal border-b-2 border-charcoal;
+  }
+</style>
+
+<script define:vars={{ images }}>
+  // Category filtering
+  const filterButtons = document.querySelectorAll('.category-filter');
+  const portfolioItems = document.querySelectorAll('.portfolio-item');
+  
+  filterButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const category = button.dataset.category;
+      
+      filterButtons.forEach(btn => btn.classList.remove('active'));
+      button.classList.add('active');
+      
+      portfolioItems.forEach(item => {
+        if (category === 'all' || item.dataset.category === category) {
+          item.style.display = 'block';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    });
+  });
+
+  // Lightbox functionality
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImage = document.getElementById('lightbox-image');
+  const lightboxClose = document.getElementById('lightbox-close');
+  const lightboxPrev = document.getElementById('lightbox-prev');
+  const lightboxNext = document.getElementById('lightbox-next');
+  let currentIndex = 0;
+
+  portfolioItems.forEach((item, index) => {
+    item.addEventListener('click', () => {
+      currentIndex = parseInt(item.dataset.index);
+      showLightbox();
+    });
+  });
+
+  function showLightbox() {
+    const image = images[currentIndex];
+    lightboxImage.src = image.src;
+    lightboxImage.alt = image.alt;
+    lightbox.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function hideLightbox() {
+    lightbox.classList.add('hidden');
+    document.body.style.overflow = 'auto';
+  }
+
+  function nextImage() {
+    currentIndex = (currentIndex + 1) % images.length;
+    showLightbox();
+  }
+
+  function prevImage() {
+    currentIndex = (currentIndex - 1 + images.length) % images.length;
+    showLightbox();
+  }
+
+  lightboxClose.addEventListener('click', hideLightbox);
+  lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox) hideLightbox();
+  });
+  lightboxNext.addEventListener('click', nextImage);
+  lightboxPrev.addEventListener('click', prevImage);
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (!lightbox.classList.contains('hidden')) {
+      if (e.key === 'Escape') hideLightbox();
+      if (e.key === 'ArrowRight') nextImage();
+      if (e.key === 'ArrowLeft') prevImage();
+    }
+  });
+</script>

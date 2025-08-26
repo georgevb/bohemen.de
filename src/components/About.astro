@@ -1,0 +1,52 @@
+---
+export interface Props {
+  image?: string;
+  title?: string;
+  content?: string;
+}
+
+const {
+  image = "https://images.unsplash.com/photo-1502982720700-bfff97f2ecac?w=800&q=80",
+  title = "Über mich",
+  content = `Ich bin Peter van Bohemen, ein leidenschaftlicher Fotograf aus Deutschland. Mit über 15 Jahren Erfahrung in der Hochzeits-, Familien- und Eventfotografie halte ich die schönsten Momente Ihres Lebens fest.
+
+Meine Spezialitäten umfassen:
+• Hochzeitsfotografie - Ich begleite Sie an Ihrem besonderen Tag
+• Familienportraits - Authentische Momente voller Liebe und Verbindung
+• Eventfotografie - Professionelle Dokumentation Ihrer Veranstaltungen
+• Naturaufnahmen - Die Schönheit unserer Umgebung eingefangen
+
+Für meine Kunden stelle ich passwortgeschützte Galerien bereit, in denen Sie Ihre Fotos in voller Qualität ansehen und herunterladen können.`
+} = Astro.props;
+---
+
+<section id="about" class="py-16 md:py-24 bg-white">
+  <div class="container-custom">
+    <div class="grid md:grid-cols-2 gap-12 items-center">
+      <!-- Photographer Image -->
+      <div class="relative animate-slide-up">
+        <img
+          src={image}
+          alt="Peter van Bohemen - Fotograf"
+          class="rounded-lg shadow-xl w-full h-[500px] object-cover"
+          loading="lazy"
+        />
+        <div class="absolute -bottom-4 -right-4 w-32 h-32 bg-cream rounded-lg -z-10"></div>
+      </div>
+
+      <!-- About Content -->
+      <div class="space-y-6 animate-slide-up" style="animation-delay: 0.2s;">
+        <h2 class="text-4xl md:text-5xl font-light">{title}</h2>
+        <div class="prose prose-lg text-gray-700 whitespace-pre-line">
+          {content}
+        </div>
+        <a 
+          href="#contact" 
+          class="inline-block btn-primary"
+        >
+          Kontakt aufnehmen
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
