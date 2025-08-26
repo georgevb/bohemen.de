@@ -6,7 +6,7 @@ const publishedPortfolio = portfolio.filter(item => item.data.published).sort((a
 
 const images = publishedPortfolio.map(item => ({
   src: item.data.image,
-  alt: item.data.alt,
+  alt: item.data.alt || item.data.title,
   title: item.data.title,
   category: item.data.category,
   size: item.data.size || 'medium'

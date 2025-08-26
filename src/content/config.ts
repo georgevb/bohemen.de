@@ -1,11 +1,11 @@
 import { z, defineCollection } from 'astro:content';
 
 const portfolioCollection = defineCollection({
-  type: 'data',
+  type: 'content',
   schema: z.object({
     title: z.string(),
     image: z.string(),
-    alt: z.string(),
+    alt: z.string().optional(),
     category: z.enum(['wedding', 'portrait', 'event', 'nature']),
     size: z.enum(['small', 'medium', 'large']).default('medium'),
     order: z.number().default(0),
