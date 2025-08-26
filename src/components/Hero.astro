@@ -10,27 +10,29 @@ const {
 } = Astro.props;
 ---
 
-<section class="relative h-screen w-full overflow-hidden">
-  <!-- Background Image with Overlay -->
-  <div class="absolute inset-0">
+<section class="relative h-screen w-full overflow-hidden flex">
+  <!-- Left side - Image (70%) -->
+  <div class="w-[70%] relative">
     <img
       src={backgroundImage}
       alt="Wedding photography by Peter van Bohemen"
       class="h-full w-full object-cover"
       loading="eager"
     />
-    <div class="absolute inset-0 bg-black bg-opacity-20"></div>
+    <div class="absolute inset-0 bg-black bg-opacity-10"></div>
   </div>
 
-  <!-- Title Overlay -->
-  <div class="absolute top-12 right-8 md:top-20 md:right-16 lg:top-24 lg:right-24 z-10">
-    <h1 class="font-script text-5xl md:text-6xl lg:text-7xl xl:text-8xl text-white drop-shadow-lg animate-fade-in">
-      {title}
-    </h1>
+  <!-- Right side - White section with title (30%) -->
+  <div class="w-[30%] bg-white flex items-center justify-center">
+    <div class="text-center px-8">
+      <h1 class="font-script text-4xl md:text-5xl lg:text-6xl text-gray-800 leading-tight">
+        {title}
+      </h1>
+    </div>
   </div>
 
   <!-- Scroll Indicator -->
-  <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white animate-bounce">
+  <div class="absolute bottom-8 left-[35%] transform -translate-x-1/2 text-gray-800 animate-bounce">
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-8 h-8">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
     </svg>
