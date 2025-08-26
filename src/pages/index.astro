@@ -8,6 +8,8 @@ import ContactSection from '../components/ContactSection.astro';
 
 // Load content from CMS
 const generalSettings = await import('../content/settings/general.json');
+const aboutSettings = await import('../content/settings/about.json');
+const contactSettings = await import('../content/settings/contact.json');
 ---
 
 <Layout title={generalSettings.siteTitle}>
@@ -16,9 +18,18 @@ const generalSettings = await import('../content/settings/general.json');
       title={generalSettings.heroTitle}
       backgroundImage={generalSettings.heroImage}
     />
-    <About />
+    <About 
+      title={aboutSettings.title}
+      image={aboutSettings.image}
+      content={aboutSettings.content}
+    />
     <PortfolioGrid />
     <TestimonialSlider />
-    <ContactSection />
+    <ContactSection 
+      address={contactSettings.address}
+      phone={contactSettings.phone}
+      email={contactSettings.email}
+      hours={contactSettings.hours}
+    />
   </main>
 </Layout>
