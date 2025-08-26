@@ -5,37 +5,37 @@ backend:
 media_folder: public/uploads
 public_folder: /uploads
 
-locale: de
+locale: en
 
 collections:
   - name: settings
-    label: Einstellungen
+    label: Settings
     files:
       - name: general
-        label: Allgemeine Einstellungen
+        label: General Settings
         file: src/content/settings/general.json
         fields:
-          - { label: Seitentitel, name: siteTitle, widget: string }
-          - { label: Seitenbeschreibung, name: siteDescription, widget: text }
-          - { label: Hero Titel, name: heroTitle, widget: string, default: "Peter van Bohemen" }
-          - { label: Hero Hintergrundbild, name: heroImage, widget: image }
+          - { label: Site Title, name: siteTitle, widget: string }
+          - { label: Site Description, name: siteDescription, widget: text }
+          - { label: Hero Title, name: heroTitle, widget: string, default: "Peter van Bohemen" }
+          - { label: Hero Background Image, name: heroImage, widget: image }
           
       - name: about
-        label: Über Mich
+        label: About Me
         file: src/content/settings/about.json
         fields:
-          - { label: Titel, name: title, widget: string }
-          - { label: Profilbild, name: image, widget: image }
-          - { label: Inhalt, name: content, widget: markdown }
+          - { label: Title, name: title, widget: string }
+          - { label: Profile Image, name: image, widget: image }
+          - { label: Content, name: content, widget: markdown }
           
       - name: contact
-        label: Kontakt
+        label: Contact
         file: src/content/settings/contact.json
         fields:
-          - { label: Adresse, name: address, widget: text }
-          - { label: Telefon, name: phone, widget: string }
-          - { label: E-Mail, name: email, widget: string }
-          - { label: Öffnungszeiten, name: hours, widget: text }
+          - { label: Address, name: address, widget: text }
+          - { label: Phone, name: phone, widget: string }
+          - { label: Email, name: email, widget: string }
+          - { label: Business Hours, name: hours, widget: text }
 
   - name: portfolio
     label: Portfolio
@@ -43,39 +43,39 @@ collections:
     create: true
     slug: "{{slug}}"
     fields:
-      - { label: Titel, name: title, widget: string }
-      - { label: Bild, name: image, widget: image }
+      - { label: Title, name: title, widget: string }
+      - { label: Image, name: image, widget: image }
       - { label: Alt Text, name: alt, widget: string }
-      - { label: Kategorie, name: category, widget: select, options: ["wedding", "portrait", "event", "nature"] }
-      - { label: Größe, name: size, widget: select, options: ["small", "medium", "large"], default: "medium" }
-      - { label: Reihenfolge, name: order, widget: number, default: 0 }
-      - { label: Veröffentlicht, name: published, widget: boolean, default: true }
+      - { label: Category, name: category, widget: select, options: ["wedding", "portrait", "event", "nature"] }
+      - { label: Size, name: size, widget: select, options: ["small", "medium", "large"], default: "medium" }
+      - { label: Order, name: order, widget: number, default: 0 }
+      - { label: Published, name: published, widget: boolean, default: true }
 
   - name: testimonials
-    label: Kundenstimmen
+    label: Testimonials
     folder: src/content/testimonials
     create: true
     slug: "{{slug}}"
     fields:
-      - { label: Autor, name: author, widget: string }
-      - { label: Event/Anlass, name: event, widget: string, required: false }
-      - { label: Bewertung, name: content, widget: text }
-      - { label: Reihenfolge, name: order, widget: number, default: 0 }
-      - { label: Veröffentlicht, name: published, widget: boolean, default: true }
+      - { label: Author, name: author, widget: string }
+      - { label: Event/Occasion, name: event, widget: string, required: false }
+      - { label: Review, name: content, widget: text }
+      - { label: Order, name: order, widget: number, default: 0 }
+      - { label: Published, name: published, widget: boolean, default: true }
 
   - name: pages
-    label: Seiten
+    label: Pages
     files:
       - name: impressum
-        label: Impressum
+        label: Legal Notice
         file: src/content/pages/impressum.md
         fields:
-          - { label: Titel, name: title, widget: string }
-          - { label: Inhalt, name: body, widget: markdown }
+          - { label: Title, name: title, widget: string }
+          - { label: Content, name: body, widget: markdown }
           
       - name: datenschutz
-        label: Datenschutz
+        label: Privacy Policy
         file: src/content/pages/datenschutz.md
         fields:
-          - { label: Titel, name: title, widget: string }
-          - { label: Inhalt, name: body, widget: markdown }
+          - { label: Title, name: title, widget: string }
+          - { label: Content, name: body, widget: markdown }
